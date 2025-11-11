@@ -95,7 +95,7 @@ class Topic:
         """
         return self.__topic_id
 
-        async def get_info(self, refresh: bool = False) -> dict:
+    async def get_info(self, refresh: bool = False) -> dict:
         """
         获取话题简介
 

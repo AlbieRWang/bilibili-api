@@ -11,16 +11,16 @@ from bilibili_api import topic
 ```
 
 - [class Topic()](#class-Topic)
-- [def \_\_init\_\_()](#def-\_\_init\_\_)
-- [async def get\_info()](#async-def-get\_info)
-- [async def get\_cards()](#async-def-get\_cards)
-- [async def get\_dynamics()](#async-def-get\_dynamics)
-- [def get\_saved\_dynamic\_items()](#def-get\_saved\_dynamic\_items)
-- [def get\_saved\_dynamic\_item()](#def-get\_saved\_dynamic\_item)
-- [def clear\_saved\_dynamic\_items()](#def-clear\_saved\_dynamic\_items)
-- [def get\_topic\_id()](#def-get\_topic\_id)
-- [async def like()](#async-def-like)
-- [async def set\_favorite()](#async-def-set\_favorite)
+  - [def \_\_init\_\_()](#def-\_\_init\_\_)
+  - [async def get\_info()](#async-def-get\_info)
+  - [async def get\_cards()](#async-def-get\_cards)
+  - [async def get\_dynamics()](#async-def-get\_dynamics)
+  - [def get\_saved\_dynamic\_items()](#def-get\_saved\_dynamic\_items)
+  - [def get\_saved\_dynamic\_item()](#def-get\_saved\_dynamic\_item)
+  - [def clear\_saved\_dynamic\_items()](#def-clear\_saved\_dynamic\_items)
+  - [def get\_topic\_id()](#def-get\_topic\_id)
+  - [async def like()](#async-def-like)
+  - [async def set\_favorite()](#async-def-set\_favorite)
 - [class TopicCardsSortBy()](#class-TopicCardsSortBy)
 - [async def get\_hot\_topics()](#async-def-get\_hot\_topics)
 - [async def search\_topic()](#async-def-search\_topic)
@@ -46,12 +46,25 @@ from bilibili_api import topic
 | `credential` | `Credential` | 凭据类 |
 
 
+### async def get_info()
+
+获取话题简介
+
+该方法默认会缓存接口返回，除非传入 `refresh=True` 或首次调用。
+
+| name | type | description |
+| - | - | - |
+| `refresh` | `bool` | 是否强制刷新缓存. Defaults to False. |
+
+**Returns:** `dict`:  调用 API 返回的结果
+
+
+
 ### async def get_cards()
 
 获取话题下的内容
 
 未登录无法使用热门排序字段即 TopicCardsSortBy.RECOMMEND
-
 
 | name | type | description |
 | - | - | - |
@@ -63,15 +76,48 @@ from bilibili_api import topic
 
 
 
+### async def get_dynamics()
 
-### async def get_info()
+获取话题下的所有动态。
 
-获取话题简介
+会自动根据分页信息持续请求直到没有更多数据或达到 `limit` 限制，默认会缓存每条动态的原始数据。
+
+| name | type | description |
+| - | - | - |
+| `ps` | `int` | 每次请求的数据数量. Defaults to 100. |
+| `sort_by` | `TopicCardsSortBy` | 排序方式. Defaults to TopicCardsSortBy.HOT. |
+| `limit` | `Optional[int]` | 限制返回的动态数量，None 为全部. Defaults to None. |
+| `save_item` | `bool` | 是否将原始卡片数据保存到缓存中. Defaults to True. |
+
+**Returns:** `List[dynamic.Dynamic]`:  动态对象列表
 
 
 
-**Returns:** `dict`:  调用 API 返回的结果
+### def get_saved_dynamic_items()
 
+获取已保存的动态原始数据。
+
+**Returns:** `Dict[int, dict]`:  动态 ID 与对应原始数据的映射
+
+
+
+### def get_saved_dynamic_item()
+
+获取指定动态的已保存原始数据。
+
+| name | type | description |
+| - | - | - |
+| `dynamic_id` | `int` | 动态 ID |
+
+**Returns:** `Optional[dict]`:  原始数据，若未保存则为 None
+
+
+
+### def clear_saved_dynamic_items()
+
+清空已保存的动态原始数据。
+
+**Returns:** `None`
 
 
 
@@ -85,11 +131,9 @@ from bilibili_api import topic
 
 
 
-
 ### async def like()
 
 设置点赞话题
-
 
 | name | type | description |
 | - | - | - |
@@ -99,18 +143,15 @@ from bilibili_api import topic
 
 
 
-
 ### async def set_favorite()
 
 设置收藏话题
-
 
 | name | type | description |
 | - | - | - |
 | `status` | `bool` | 是否设置收藏. Defaults to True. |
 
 **Returns:** `dict`:  调用 API 返回的结果
-
 
 
 
