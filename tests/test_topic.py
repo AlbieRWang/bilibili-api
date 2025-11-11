@@ -1,4 +1,4 @@
-from bilibili_api import topic
+from bilibili_api import topic, dynamic
 from bilibili_api.exceptions.ResponseCodeException import ResponseCodeException
 
 from .common import get_credential
@@ -35,3 +35,15 @@ async def test_e_get_hot_topics():
 
 async def test_f_search_topic():
     return await topic.search_topic("bilibili-api")
+
+
+async def test_g_Topic_get_dynamics():
+    t.clear_saved_dynamic_items()
+    dynamics = await t.get_dynamics(ps=5, limit=5)
+    assert isinstance(dynamics, list)
+    assert len(dynamics) > 0
+    assert all(isinstance(item, dynamic.Dynamic) for item in dynamics)
+    saved = t.get_saved_dynamic_items()
+    assert len(saved) >= len(dynamics)
+    for dyn in dynamics:
+        assert dyn.get_dynamic_id() in saved
